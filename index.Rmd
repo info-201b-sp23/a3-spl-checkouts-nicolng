@@ -66,12 +66,12 @@ library(dplyr)
 library(tidyverse)
 five_check <- read.csv("2013-2023-5-Checkouts-SPL.csv", stringsAsFactors = FALSE)
 
-
+# find the top 5 material types
 five_check %>% 
   group_by(MaterialType) %>% 
   summarise(total = length(MaterialType)) %>%
   top_n(5)
-
+# count the top 5 material types (qualitative to quantitative)
 top_five_by_years <- five_check %>% 
   group_by(CheckoutYear) %>% 
   summarise(Audiobooks = sum(Checkouts[MaterialType == "AUDIOBOOK"]),
@@ -80,6 +80,7 @@ top_five_by_years <- five_check %>%
            SoundDis = sum(Checkouts[MaterialType == "SOUNDDISC"]), 
            VideoDis = sum(Checkouts[MaterialType == "VIDEODISC"]))
 
+# plot
 ggplot(data = top_five_by_years) + 
   geom_line(mapping = aes(x = CheckoutYear, y = Audiobooks, col = "Audiobooks")) +
   geom_line(mapping = aes(x = CheckoutYear, y = Books, col = "Books")) +
@@ -97,6 +98,7 @@ ggplot(data = top_five_by_years) +
 
 ```{r, echo = FALSE, code = readLines("chart2_example.R")}
 
+# plot of proportion
 ggplot(data = five_check) + 
   geom_bar(mapping = aes(x = CheckoutYear, fill = UsageClass), position = "fill")+
   labs(title = "Proportion of Digital and Phyiscal Items Overtime",
@@ -119,11 +121,14 @@ Here's an example of how to run an R script inside an RMarkdown file:
 
 ```{r, echo = FALSE, code = readLines("chart2_example.R")}
 
+# count the amount of fiction and literature checked out
 fic_vs_lit <- five_check %>% 
   group_by(CheckoutYear) %>%
   summarise(Fiction = sum(Checkouts[str_detect(tolower(Subjects), "fiction")]),
             Literature = sum(Checkouts[str_detect(tolower(Subjects), "literature")]))
 
+
+# plot
 ggplot(data = fic_vs_lit) + 
   geom_line(mapping = aes(x = CheckoutYear, y = Fiction, col = "Fiction")) +
   geom_line(mapping = aes(x = CheckoutYear, y = Literature, col = "Literature")) +
