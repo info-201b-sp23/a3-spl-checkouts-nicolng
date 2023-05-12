@@ -64,6 +64,7 @@ fictions are two of the most favored genre and I'm curious on their checked out 
 ```{r, echo = FALSE, warning = FALSE, code = readLines("chart1_example.R")}
 library(dplyr)
 library(tidyverse)
+library(scales)
 five_check <- read.csv("2013-2023-5-Checkouts-SPL.csv", stringsAsFactors = FALSE)
 
 # find the top 5 material types
@@ -90,7 +91,10 @@ ggplot(data = top_five_by_years) +
   labs(title = "Top 5 Types of Materials Checked Out By Year", 
       x = "Checkout Year", 
       y = "Total Material Type Checked Out",
-      color = "Types of Materials")
+      color = "Types of Materials") + 
+  scale_x_continuous(breaks = seq(2012, 2023, by = 1)) + 
+  scale_y_continuous(labels = label_number_si())
+  
 
 ```
 
@@ -135,7 +139,9 @@ ggplot(data = fic_vs_lit) +
   labs(title = "Amount of Fiction versus Literature Checked Out Over Time",
         x = "Checkout Year",
         y = "Amount Checked Out",
-        color = "Type of Genre")
+        color = "Type of Genre") +
+  scale_x_continuous(breaks = seq(2012, 2023, by = 1)) + 
+  scale_y_continuous(labels = label_number_si())
 
 ```
 
