@@ -7,74 +7,103 @@ output: html_document
 
 An introduction of the data and a description of the trends/books/items you are choosing to analyze (and why!)
 
+  The values I'd like to calculate is the proportion of each usage class checked out over time. As our 
+technology develops in this day in age, I'm curious on the usage of digital checkouts and how many people are 
+transitioning to electronic methods. I'm also curious on whichh types of materials are used the most. Especially 
+because of the pandemic, I'm interested in finding out how each material type changed over time. Literature and
+fictions are two of the most favored genre and I'm curious on their checked out amounts over time.
+
+
 ### Summary Information
 
-Write a summary paragraph of findings that includes the 5 values calculated from your summary information R
-script
-
-These will likely be calculated using your DPLYR skills, answering questions such as:
-
-- What is the average number of checkouts for each item?
-- What is the month or year with the most/least checkouts for a book that you're interested in?
-- What is the month or year with the most/least checkouts for ebooks?
-- How has the number of print book checkouts changed over time?
-
-Feel free to calculate and report values that you find relevant.
+- What is the change in proportion of usage class items over time?
+- Which month had the greatest proportion of digital usage items?
+- What is the year with the most amount of audiobook checkouts?
+- How did the top 5 material type checkout change over time?
+- How did the number of fiction versus literate books change over time?
 
 ### The Dataset
 
-- Who collected/published the data?  
+- Who collected/published the data?
+    The data is provided by the Seattle Public Library and the dataset owner is David Christensen  
+
 - What are the parameters of the data (dates, number of checkouts, kinds of books, etc.)?
-- How was the data collected or generated?  
+    UsageClass, CheckoutType, MaterialType, CheckoutYear, CheckoutMonth, Checkouts, Title, ISBN, 
+    Creator, Subjects, Publisher, and PublicationYear.
+
+- How was the data collected or generated? 
+    Collected monthly by title for physical and digital items.
+
 - Why was the data collected?  
+    This data was collected to not only keep track of which items were checked out, but also allows
+    the library to find trends in their popular/non-popular items.
+
 - What, if any, ethical questions do you need to consider when working with this data?  
+    Did the borrowers give us consent to keep track of their checkout items and whether or not they 
+    think this information is sensitive or not.
+
 - What are possible limitations or problems with this data?   (at least 200 words)
+    Some limitations with this data is the ability to see what people checkout together. For example,
+    we're not able to see whether people who checkout fiction only like fictions or they enjoy fiction
+    best with history. Understanding correlations can allows the library to arrange their books to where 
+    checking out books can be closer together. Since this data only shows how many times a certain item is 
+    checked out, we cannot determine this information from it.
 
+    One problem with this dataset is that this dataset only provides the items that are checked out 5 times
+    within a month. Those that are checked out 4 or less times is not included in this dataset and can cause 
+    this dataset to be unrepresentative of the actual trends. There may be a lot of checked out history books 
+    that aren't checked out very often but because of this dataset, we aren't able to see it.
 
-### First Trends Over Time Chart
+    Another problem with this dataset is that it does not provide us with what changed during the pandemic.
+    How accessible was the online library? How did the checking out process work? How many people knew 
+    about it? These are all questions that can affect about my people use the library during COVID and affect
+    the number of checked out items between physical and digital.
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
-
-The first chart that you will create and include will show the trend over time of your variable/topic/interest.
-Think carefully about what you want to communicate to your user (you may have to find relevant trends in the 
-dataset first!). Here are some requirements to help guide your design:
-
-- Show more than one, but fewer than ~10 trends
-  - For example, two books, or 5 different mediums
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear - legend title
-In your .Rmd file, make sure to describe why you included the chart, and what patterns emerged
-
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the 
-variable name.
-
-Here's an example of how to run an R script inside an RMarkdown file:
+### First Trends Over Time chart
 
 ```{r, echo = FALSE, warning = FALSE, code = readLines("chart1_example.R")}
+library(dplyr)
+library(tidyverse)
+five_check <- read.csv("2013-2023-5-Checkouts-SPL.csv", stringsAsFactors = FALSE)
+
+
+five_check %>% 
+  group_by(MaterialType) %>% 
+  summarise(total = length(MaterialType)) %>%
+  top_n(5)
+
+top_five_by_years <- five_check %>% 
+  group_by(CheckoutYear) %>% 
+  summarise(Audiobooks = sum(Checkouts[MaterialType == "AUDIOBOOK"]),
+           Books = sum(Checkouts[MaterialType == "BOOK"]),
+           Ebooks = sum(Checkouts[MaterialType == "EBOOK"]),
+           SoundDis = sum(Checkouts[MaterialType == "SOUNDDISC"]), 
+           VideoDis = sum(Checkouts[MaterialType == "VIDEODISC"]))
+
+ggplot(data = top_five_by_years) + 
+  geom_line(mapping = aes(x = CheckoutYear, y = Audiobooks, col = "Audiobooks")) +
+  geom_line(mapping = aes(x = CheckoutYear, y = Books, col = "Books")) +
+  geom_line(mapping = aes(x = CheckoutYear, y = Ebooks, col = "Ebooks")) +
+  geom_line(mapping = aes(x = CheckoutYear, y = SoundDis, col = "Sound Disks")) +
+  geom_line(mapping = aes(x = CheckoutYear, y = VideoDis, col = "Video Disks")) +
+  labs(title = "Top 5 Types of Materials Checked Out By Year", 
+      x = "Checkout Year", 
+      y = "Total Material Type Checked Out",
+      color = "Types of Materials")
+
 ```
 
 ### Second Trends Over Time Chart
 
-Include a chart. Make sure to describe why you included the chart, and what patterns emerged
-
-The second chart that you will create and include will show another trend over time of your 
-variable/topic/interest. Think carefully about what you want to communicate to your user (you may have to find 
-relevant trends in the dataset first!). Here are some requirements to help guide your design:
-
-- Show more than one, but fewer than ~10 trends
-  - For example, two books, or 5 different mediums
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear - legend title
-In your .Rmd file, make sure to describe why you included the chart, and what patterns emerged
-
-When we say "clear" or "human readable" titles and labels, that means that you should not just display the 
-variable name.
-
-Here's an example of how to run an R script inside an RMarkdown file:
-
 ```{r, echo = FALSE, code = readLines("chart2_example.R")}
+
+ggplot(data = five_check) + 
+  geom_bar(mapping = aes(x = CheckoutYear, fill = UsageClass), position = "fill")+
+  labs(title = "Proportion of Digital and Phyiscal Items Overtime",
+      x = "Checkout Year",
+      y = "Proportion",
+      fill = "Usage Class")
+
 ```
 
 ### Your Choice
@@ -89,6 +118,20 @@ more. Here are some requirements to help guide your design:
 Here's an example of how to run an R script inside an RMarkdown file:
 
 ```{r, echo = FALSE, code = readLines("chart2_example.R")}
+
+fic_vs_lit <- five_check %>% 
+  group_by(CheckoutYear) %>%
+  summarise(Fiction = sum(Checkouts[str_detect(tolower(Subjects), "fiction")]),
+            Literature = sum(Checkouts[str_detect(tolower(Subjects), "literature")]))
+
+ggplot(data = fic_vs_lit) + 
+  geom_line(mapping = aes(x = CheckoutYear, y = Fiction, col = "Fiction")) +
+  geom_line(mapping = aes(x = CheckoutYear, y = Literature, col = "Literature")) +
+  labs(title = "Amount of Fiction versus Literature Checked Out Over Time",
+        x = "Checkout Year",
+        y = "Amount Checked Out",
+        color = "Type of Genre")
+
 ```
 
 
