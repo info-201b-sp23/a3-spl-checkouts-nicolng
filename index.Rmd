@@ -1,6 +1,7 @@
 ---
 title: "A3: SPL Library Checkouts"
 output: html_document
+author: Nick Ng
 ---
 
 ### Introduction
@@ -25,24 +26,30 @@ fictions are two of the most favored genre and I'm curious on their checked out 
 ### The Dataset
 
 - Who collected/published the data?
+
     The data is provided by the Seattle Public Library and the dataset owner is David Christensen  
 
 - What are the parameters of the data (dates, number of checkouts, kinds of books, etc.)?
+
     UsageClass, CheckoutType, MaterialType, CheckoutYear, CheckoutMonth, Checkouts, Title, ISBN, 
     Creator, Subjects, Publisher, and PublicationYear.
 
 - How was the data collected or generated? 
+
     Collected monthly by title for physical and digital items.
 
 - Why was the data collected?  
+
     This data was collected to not only keep track of which items were checked out, but also allows
     the library to find trends in their popular/non-popular items.
 
 - What, if any, ethical questions do you need to consider when working with this data?  
+
     Did the borrowers give us consent to keep track of their checkout items and whether or not they 
     think this information is sensitive or not.
 
 - What are possible limitations or problems with this data?   (at least 200 words)
+
     Some limitations with this data is the ability to see what people checkout together. For example,
     we're not able to see whether people who checkout fiction only like fictions or they enjoy fiction
     best with history. Understanding correlations can allows the library to arrange their books to where 
@@ -61,43 +68,9 @@ fictions are two of the most favored genre and I'm curious on their checked out 
 
 ### First Trends Over Time chart
 
-```{r, echo = FALSE, warning = FALSE, code = readLines("chart1_example.R")}
-library(dplyr)
-library(tidyverse)
-library(scales)
-five_check <- read.csv("2013-2023-5-Checkouts-SPL.csv", stringsAsFactors = FALSE)
-
-# find the top 5 material types
-five_check %>% 
-  group_by(MaterialType) %>% 
-  summarise(total = length(MaterialType)) %>%
-  top_n(5)
-
-# count the top 5 material types (qualitative to quantitative)
-top_five_by_years <- five_check %>% 
-  group_by(CheckoutYear) %>% 
-  summarise(Audiobooks = sum(Checkouts[MaterialType == "AUDIOBOOK"]),
-           Books = sum(Checkouts[MaterialType == "BOOK"]),
-           Ebooks = sum(Checkouts[MaterialType == "EBOOK"]),
-           SoundDis = sum(Checkouts[MaterialType == "SOUNDDISC"]), 
-           VideoDis = sum(Checkouts[MaterialType == "VIDEODISC"]))
-
-# plot checkout year vs material types
-ggplot(data = top_five_by_years) + 
-  geom_line(mapping = aes(x = CheckoutYear, y = Audiobooks, col = "Audiobooks")) +
-  geom_line(mapping = aes(x = CheckoutYear, y = Books, col = "Books")) +
-  geom_line(mapping = aes(x = CheckoutYear, y = Ebooks, col = "Ebooks")) +
-  geom_line(mapping = aes(x = CheckoutYear, y = SoundDis, col = "Sound Disks")) +
-  geom_line(mapping = aes(x = CheckoutYear, y = VideoDis, col = "Video Disks")) +
-  labs(title = "Top 5 Types of Materials Checked Out By Year", 
-      x = "Checkout Year", 
-      y = "Total Material Type Checked Out",
-      color = "Types of Materials") + 
-  scale_x_continuous(breaks = seq(2012, 2023, by = 1)) + 
-  scale_y_continuous(labels = label_number_si())
-  
-
+```{r, echo = FALSE, warning = FALSE, message = FALSE, code = readLines("chart1.R")}
 ```
+
 We're able to see that Ebooks soared during 2020 and this can be the cause of the pandemic.
 People were locked down and so they coverted to electronic books and why regular books
 dropped too. We also see that video and sound discs are becoming less common over the year.
@@ -105,17 +78,9 @@ Audiobooks also increased over time as well.
 
 ### Second Trends Over Time Chart
 
-```{r, echo = FALSE, code = readLines("chart2_example.R")}
-
-# plot of proportion of digital and physical items overtime
-ggplot(data = five_check) + 
-  geom_bar(mapping = aes(x = CheckoutYear, fill = UsageClass), position = "fill")+
-  labs(title = "Proportion of Digital and Phyiscal Items Overtime",
-      x = "Checkout Year",
-      y = "Proportion",
-      fill = "Usage Class")
-
+```{r, echo = FALSE, warning = FALSE, message = FALSE, code = readLines("chart2.R")}
 ```
+
 In this stacked bar chart, we're able to see that digital usage took over during 2020. 2020 is 
 the start of the pandemic and so this can be the reason why digital usage took over.
 
@@ -130,27 +95,10 @@ more. Here are some requirements to help guide your design:
 
 Here's an example of how to run an R script inside an RMarkdown file:
 
-```{r, echo = FALSE, code = readLines("chart2_example.R")}
-
-# count the amount of fiction and literature checked out
-fic_vs_lit <- five_check %>% 
-  group_by(CheckoutYear) %>%
-  summarise(Fiction = sum(Checkouts[str_detect(tolower(Subjects), "fiction")]),
-            Literature = sum(Checkouts[str_detect(tolower(Subjects), "literature")]))
-
-
-# plot of fiction vs literature over time
-ggplot(data = fic_vs_lit) + 
-  geom_line(mapping = aes(x = CheckoutYear, y = Fiction, col = "Fiction")) +
-  geom_line(mapping = aes(x = CheckoutYear, y = Literature, col = "Literature")) +
-  labs(title = "Amount of Fiction versus Literature Checked Out Over Time",
-        x = "Checkout Year",
-        y = "Amount Checked Out",
-        color = "Type of Genre") +
-  scale_x_continuous(breaks = seq(2012, 2023, by = 1)) + 
-  scale_y_continuous(labels = label_number_si())
+```{r, echo = FALSE, warning = FALSE,  message = FALSE, code = readLines("chart3.R")}
 
 ```
+
 In this graph, we're able to see that fiction story books are superiorly more popular
 than literate books throughout the years. We do notice that people started to read 
 less fiction in 2020, the same year of the start of the pandemic but we cannot determine
