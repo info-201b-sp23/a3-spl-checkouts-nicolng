@@ -36,7 +36,10 @@ fictions are two of the most favored genre and I'm curious on their checked out 
 
 - How was the data collected or generated? 
 
-    Collected monthly by title for physical and digital items.
+    Collected monthly by title for physical and digital items. There are 12 columns for 
+    information given but the ISBN column is empty ensure privacy. In this dataset,
+    we have 4224916 rows meaning we have 4224916 different items through the year 
+    checked out.
 
 - Why was the data collected?  
 
