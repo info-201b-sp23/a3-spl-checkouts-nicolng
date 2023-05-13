@@ -6,8 +6,6 @@ author: Nick Ng
 
 ### Introduction
 
-An introduction of the data and a description of the trends/books/items you are choosing to analyze (and why!)
-
   The values I'd like to calculate is the proportion of each usage class checked out over time. As our 
 technology develops in this day in age, I'm curious on the usage of digital checkouts and how many people are 
 transitioning to electronic methods. I'm also curious on whichh types of materials are used the most. Especially 
@@ -18,10 +16,30 @@ fictions are two of the most favored genre and I'm curious on their checked out 
 ### Summary Information
 
 - What is the change in proportion of usage class items over time?
+
+  In the second graph we're able to see that users converted over to digital usage 
+  from physical in 2020. This is not surprising since this is when covid started and
+  people were locked down.
+
 - Which month had the greatest proportion of digital usage items?
+  
+  In the second graph, we're able to see that 2020 had the most amount of digital 
+  usage. Again, since it was the pandemic, this information is not suprising to me.
+  
 - What is the year with the most amount of audiobook checkouts?
+
+  2022 has the most amount of audiobooks checked out from 2013-2023. We can see there
+  has been an increase in audiobook usage from 2013-2022.
+  
 - How did the top 5 material type checkout change over time?
-- How did the number of fiction versus literate books change over time?
+
+  We can see that books, video disks, and sound disks are decreasing demand as ebooks
+  and audiobooks are becoming more popular in this day in age.
+  
+- How did the number of fiction versus literature books change over time?
+
+  We can see that fiction demand has always trumped literature but there was a slight 
+  drop in 2020. Today, it is still more demand than literature.
 
 ### The Dataset
 
@@ -88,15 +106,6 @@ In this stacked bar chart, we're able to see that digital usage took over during
 the start of the pandemic and so this can be the reason why digital usage took over.
 
 ### Your Choice
-
-The last chart is up to you. It could be a line plot, scatter plot, histogram, bar plot, stacked bar plot, and 
-more. Here are some requirements to help guide your design:
-
-- You must have clear x and y axis labels
-- The chart needs a clear title 
-- You need a legend for your different line colors and a clear legend title
-
-Here's an example of how to run an R script inside an RMarkdown file:
 
 ```{r, echo = FALSE, warning = FALSE,  message = FALSE, code = readLines("chart3.R")}
 
