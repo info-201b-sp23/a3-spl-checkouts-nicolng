@@ -72,6 +72,7 @@ five_check %>%
   group_by(MaterialType) %>% 
   summarise(total = length(MaterialType)) %>%
   top_n(5)
+
 # count the top 5 material types (qualitative to quantitative)
 top_five_by_years <- five_check %>% 
   group_by(CheckoutYear) %>% 
@@ -81,7 +82,7 @@ top_five_by_years <- five_check %>%
            SoundDis = sum(Checkouts[MaterialType == "SOUNDDISC"]), 
            VideoDis = sum(Checkouts[MaterialType == "VIDEODISC"]))
 
-# plot
+# plot checkout year vs material types
 ggplot(data = top_five_by_years) + 
   geom_line(mapping = aes(x = CheckoutYear, y = Audiobooks, col = "Audiobooks")) +
   geom_line(mapping = aes(x = CheckoutYear, y = Books, col = "Books")) +
@@ -97,12 +98,16 @@ ggplot(data = top_five_by_years) +
   
 
 ```
+We're able to see that Ebooks soared during 2020 and this can be the cause of the pandemic.
+People were locked down and so they coverted to electronic books and why regular books
+dropped too. We also see that video and sound discs are becoming less common over the year.
+Audiobooks also increased over time as well.
 
 ### Second Trends Over Time Chart
 
 ```{r, echo = FALSE, code = readLines("chart2_example.R")}
 
-# plot of proportion
+# plot of proportion of digital and physical items overtime
 ggplot(data = five_check) + 
   geom_bar(mapping = aes(x = CheckoutYear, fill = UsageClass), position = "fill")+
   labs(title = "Proportion of Digital and Phyiscal Items Overtime",
@@ -111,6 +116,8 @@ ggplot(data = five_check) +
       fill = "Usage Class")
 
 ```
+In this stacked bar chart, we're able to see that digital usage took over during 2020. 2020 is 
+the start of the pandemic and so this can be the reason why digital usage took over.
 
 ### Your Choice
 
@@ -132,7 +139,7 @@ fic_vs_lit <- five_check %>%
             Literature = sum(Checkouts[str_detect(tolower(Subjects), "literature")]))
 
 
-# plot
+# plot of fiction vs literature over time
 ggplot(data = fic_vs_lit) + 
   geom_line(mapping = aes(x = CheckoutYear, y = Fiction, col = "Fiction")) +
   geom_line(mapping = aes(x = CheckoutYear, y = Literature, col = "Literature")) +
@@ -144,5 +151,9 @@ ggplot(data = fic_vs_lit) +
   scale_y_continuous(labels = label_number_si())
 
 ```
+In this graph, we're able to see that fiction story books are superiorly more popular
+than literate books throughout the years. We do notice that people started to read 
+less fiction in 2020, the same year of the start of the pandemic but we cannot determine
+the cause of this from this dataset.
 
 
